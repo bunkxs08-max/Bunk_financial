@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Template 2 — Income Only</title>
+  <style>
+    :root{
+      --bg:#0b1020; --card:#121a33; --text:#e9ecff; --muted:#a9b1d6;
+      --line: rgba(255,255,255,.10);
+      --green:#22c55e; --yellow:#f59e0b; --red:#ef4444; --blue:#3b82f6; --gray:#94a3b8;
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:
+        radial-gradient(900px 450px at 20% 0%, rgba(59,130,246,.18), transparent 60%),
+        radial-gradient(900px 450px at 80% 10%, rgba(34,197,94,.14), transparent 60%),
+        var(--bg);
+      color:var(--text);
+    }
+    header{
+      max-width:1100px; margin:0 auto; padding:20px 14px 10px;
+      display:flex; gap:12px; flex-wrap:wrap; justify-content:space-between; align-items:flex-start;
+    }
+    .title h1{margin:0; font-size:18px}
+    .title p{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.35}
+    .toolbar{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .search{
+      border:1px solid var(--line); background:rgba(0,0,0,.22); color:var(--text);
+      padding:10px 12px; border-radius:12px; min-width:220px; outline:none;
+    }
+    .btn{
+      border:1px solid var(--line); background:rgba(255,255,255,.05); color:var(--text);
+      padding:10px 12px; border-radius:12px; cursor:pointer;
+      font-weight:900; font-size:13px;
+    }
+    .btn:hover{background:rgba(255,255,255,.08)}
+    .btn.primary{border-color:rgba(59,130,246,.45); background:rgba(59,130,246,.18)}
+    .btn.danger{border-color:rgba(239,68,68,.45); background:rgba(239,68,68,.14)}
+
+    .wrap{max-width:1100px; margin:0 auto; padding:0 14px 40px}
+    .kpi{display:grid; gap:10px; grid-template-columns:repeat(2,minmax(0,1fr)); margin-top:12px}
+    @media(min-width:560px){.kpi{grid-template-columns:repeat(4,minmax(0,1fr));}}
+    .box{border:1px solid var(--line); background:rgba(0,0,0,.18); border-radius:16px; padding:12px}
+    .box .label{color:var(--muted); font-size:12px}
+    .box .val{margin-top:6px; font-size:16px; font-weight:900}
+
+    .card{
+      margin-top:14px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card-head{padding:14px; background:rgba(0,0,0,.10); border-bottom:1px solid var(--line)}
+    .card-head h2{margin:0; font-size:14px}
+    .card-head .hint{margin-top:6px; color:var(--muted); font-size:12px}
+    .card-body{padding:12px 14px 14px}
+    .table-wrap{overflow:auto; border:1px solid var(--line); border-radius:14px; background:rgba(0,0,0,.14)}
+    table{width:100%; border-collapse:collapse; min-width:680px}
+    th,td{padding:10px; border-bottom:1px solid var(--line); font-size:12.5px; vertical-align:top}
+    th{background:rgba(255,255,255,.06); position:sticky; top:0; z-index:1}
+    tr:hover td{background:rgba(255,255,255,.03)}
+    .mono{font-variant-numeric:tabular-nums}
+    .right{text-align:right}
+    .muted{color:var(--muted)}
+
+    .row-actions{display:flex; gap:8px; flex-wrap:wrap}
+    .mini{
+      padding:7px 10px; border-radius:10px; font-size:12px; font-weight:900;
+      border:1px solid var(--line); background:rgba(255,255,255,.05); color:var(--text);
+      cursor:pointer;
+    }
+    .mini:hover{background:rgba(255,255,255,.08)}
+    .mini.primary{border-color:rgba(59,130,246,.45); background:rgba(59,130,246,.18)}
+    .mini.danger{border-color:rgba(239,68,68,.45); background:rgba(239,68,68,.14)}
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      font-weight:900; font-size:12px; border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      white-space:nowrap;
+    }
+    .dot{width:10px; height:10px; border-radius:999px; background:var(--gray); box-shadow:0 0 0 4px rgba(148,163,184,.12)}
+    .pill.green .dot{background:var(--green); box-shadow:0 0 0 4px rgba(34,197,94,.14)}
+    .pill.yellow .dot{background:var(--yellow); box-shadow:0 0 0 4px rgba(245,158,11,.14)}
+    .pill.red .dot{background:var(--red); box-shadow:0 0 0 4px rgba(239,68,68,.14)}
+    .pill.blue .dot{background:var(--blue); box-shadow:0 0 0 4px rgba(59,130,246,.14)}
+
+    /* Modal */
+    .modal-backdrop{
+      position:fixed; inset:0; background:rgba(0,0,0,.55);
+      display:none; align-items:center; justify-content:center; padding:14px; z-index:999;
+    }
+    .modal{
+      width:min(720px,100%); border-radius:18px; border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(18,26,51,.98),rgba(12,18,38,.98));
+      box-shadow:var(--shadow); overflow:hidden;
+    }
+    .modal-head{padding:14px; display:flex; justify-content:space-between; align-items:center; gap:10px; border-bottom:1px solid var(--line)}
+    .modal-head h3{margin:0; font-size:14px}
+    .modal-body{padding:14px}
+    .modal-foot{padding:14px; border-top:1px solid var(--line); display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap}
+    label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
+    input,select{
+      width:100%; padding:10px; border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.22); color:var(--text); outline:none;
+    }
+    .form-grid{display:grid; gap:10px; grid-template-columns:1fr}
+    @media(min-width:700px){.form-grid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="title">
+    <h1>💸 Buku Income — Template 2 (Income Only)</h1>
+    <p>
+      Catat pemasukan simpel: <b>Tanggal</b>, <b>Jenis Order</b>, <b>Price</b>, <b>Status</b>.
+      <br/>Data disimpan di <b>browser (localStorage)</b>. Ada <b>Export/Import JSON</b>.
+    </p>
+  </div>
+
+  <div class="toolbar">
+    <input id="search" class="search" placeholder="Cari: jenis order / status..." />
+    <button class="btn primary" id="btnAdd">➕ Tambah Income</button>
+    <button class="btn" id="btnAddSample">✨ Contoh data</button>
+    <button class="btn" id="btnExport">⬇️ Export JSON</button>
+    <button class="btn" id="btnImport">⬆️ Import JSON</button>
+    <button class="btn danger" id="btnReset">🗑️ Reset</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="kpi" id="kpi"></div>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>📄 INCOME LIST</h2>
+      <div class="hint">Klik Edit/Hapus di kolom Action. Status pakai simbol warna + tulisan.</div>
+    </div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table id="tblIncome">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Tanggal</th>
+              <th>Jenis Order</th>
+              <th class="right">Price</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<input type="file" id="fileInput" accept="application/json" style="display:none" />
+
+<!-- Modal -->
+<div class="modal-backdrop" id="backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">Tambah Income</h3>
+      <button class="mini" id="btnClose">✖</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot">
+      <button class="btn" id="btnCancel">Batal</button>
+      <button class="btn primary" id="btnSave">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== Helpers =====
+  const fmtIDR = (n) => new Intl.NumberFormat('id-ID').format(Math.round(n || 0));
+  const parseNum = (v) => {
+    const s = String(v ?? "").replace(/[^\d.-]/g,'');
+    const n = Number(s);
+    return Number.isFinite(n) ? n : 0;
+  };
+  function pill(text){
+    const t = (text || "").toLowerCase();
+    let cls = "pill";
+    if(["paid","lunas","masuk","done"].includes(t)) cls += " green";
+    else if(["pending","dp","partial"].includes(t)) cls += " yellow";
+    else if(["cancel","refund","gagal","unpaid"].includes(t)) cls += " red";
+    else cls += " blue";
+    return `<span class="${cls}"><span class="dot"></span><span>${text || "-"}</span></span>`;
+  }
+  const todayDDMMYYYY = () => {
+    const d = new Date();
+    const dd = String(d.getDate()).padStart(2,"0");
+    const mm = String(d.getMonth()+1).padStart(2,"0");
+    const yy = d.getFullYear();
+    return `${dd}/${mm}/${yy}`;
+  };
+
+  // ===== Storage =====
+  const KEY = "income_only_template_v1";
+  const defaultData = { income: [] };
+
+  function load(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      if(!raw) return structuredClone(defaultData);
+      const p = JSON.parse(raw);
+      return { income: Array.isArray(p.income) ? p.income : [] };
+    } catch { return structuredClone(defaultData); }
+  }
+  function save(data){ localStorage.setItem(KEY, JSON.stringify(data)); }
+
+  // ===== Modal =====
+  const backdrop = document.getElementById("backdrop");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalBody = document.getElementById("modalBody");
+  let modalState = { mode:"add", index:-1 };
+
+  function openModal(mode, index, current){
+    modalState = { mode, index };
+    modalTitle.textContent = (mode==="add" ? "Tambah Income" : "Edit Income");
+    const v = current || {};
+    modalBody.innerHTML = `
+      <div class="form-grid">
+        <div>
+          <label>Tanggal (DD/MM/YYYY)</label>
+          <input id="f_date" value="${v.date || todayDDMMYYYY()}" placeholder="05/01/2026" />
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="f_status">
+            ${opt(v.status, ["Masuk","Pending","Cancel"])}
+          </select>
+        </div>
+        <div style="grid-column:1/-1">
+          <label>Jenis Order</label>
+          <input id="f_type" value="${v.type || ""}" placeholder="Full Body / Logo / dll" />
+        </div>
+        <div style="grid-column:1/-1">
+          <label>Price</label>
+          <input id="f_price" inputmode="numeric" value="${v.price ?? ""}" placeholder="500000" />
+        </div>
+      </div>
+    `;
+    backdrop.style.display = "flex";
+  }
+  function closeModal(){
+    backdrop.style.display = "none";
+    modalBody.innerHTML = "";
+    modalState = { mode:"add", index:-1 };
+  }
+  function opt(current, options){
+    const c = (current||"").trim();
+    return options.map(o=>`<option ${o===c?"selected":""}>${o}</option>`).join("");
+  }
+  function val(id){ return (document.getElementById(id)?.value || "").trim(); }
+
+  function readForm(){
+    return {
+      date: val("f_date"),
+      type: val("f_type"),
+      price: parseNum(val("f_price")),
+      status: val("f_status")
+    };
+  }
+
+  function modalSave(){
+    const v = readForm();
+    if(!v.date){ alert("Tanggal wajib diisi."); return; }
+    if(!v.type){ alert("Jenis order wajib diisi."); return; }
+    if(v.price <= 0){ alert("Price harus > 0."); return; }
+
+    const data = load();
+    if(modalState.mode === "add") data.income.push(v);
+    else data.income[modalState.index] = v;
+
+    save(data);
+    closeModal();
+    render();
+  }
+
+  // ===== Actions =====
+  function addSample(){
+    const data = load();
+    data.income = [
+      { date:"05/01/2026", type:"Full Body Anime", price:500000, status:"Masuk" },
+      { date:"06/01/2026", type:"DP Commission", price:250000, status:"Pending" },
+      { date:"07/01/2026", type:"Logo Simple", price:300000, status:"Masuk" },
+    ];
+    save(data);
+    render();
+  }
+  function exportJSON(){
+    const data = load();
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "income-only.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  function importJSON(file){
+    const reader = new FileReader();
+    reader.onload = () => {
+      try{
+        const p = JSON.parse(reader.result);
+        const clean = { income: Array.isArray(p.income) ? p.income : [] };
+        save(clean);
+        render();
+        alert("Import sukses ✅");
+      } catch { alert("File JSON invalid ❌"); }
+    };
+    reader.readAsText(file);
+  }
+  function resetAll(){
+    if(!confirm("Reset semua data income?")) return;
+    localStorage.removeItem(KEY);
+    render();
+  }
+
+  function handleTableActions(e){
+    const btn = e.target.closest("button[data-act]");
+    if(!btn) return;
+    const act = btn.dataset.act;
+    const idx = Number(btn.dataset.idx);
+    const data = load();
+
+    if(act==="edit"){
+      openModal("edit", idx, data.income[idx]);
+      return;
+    }
+    if(act==="del"){
+      if(!confirm("Hapus income ini?")) return;
+      data.income.splice(idx,1);
+      save(data);
+      render();
+    }
+  }
+
+  // ===== Render =====
+  function render(){
+    const data = load();
+    const q = (document.getElementById("search").value || "").toLowerCase().trim();
+
+    const list = data.income.filter(x=>{
+      if(!q) return true;
+      return `${x.type} ${x.status}`.toLowerCase().includes(q);
+    });
+
+    // KPI
+    const total = list.reduce((a,x)=> a + (x.price||0), 0);
+    const count = list.length;
+    const masuk = list.filter(x => (x.status||"").toLowerCase()==="masuk").reduce((a,x)=> a + (x.price||0), 0);
+    const pending = list.filter(x => (x.status||"").toLowerCase()==="pending").reduce((a,x)=> a + (x.price||0), 0);
+
+    document.getElementById("kpi").innerHTML = `
+      <div class="box"><div class="label">Total Income (Filtered)</div><div class="val mono">${fmtIDR(total)}</div></div>
+      <div class="box"><div class="label">Jumlah Entry</div><div class="val mono">${fmtIDR(count)}</div></div>
+      <div class="box"><div class="label">Masuk</div><div class="val mono">${fmtIDR(masuk)}</div></div>
+      <div class="box"><div class="label">Pending</div><div class="val mono">${fmtIDR(pending)}</div></div>
+    `;
+
+    // Table
+    const tb = document.querySelector("#tblIncome tbody");
+    tb.innerHTML = list.map((x, i)=>{
+      const realIndex = data.income.indexOf(x);
+      return `
+        <tr>
+          <td class="mono">${i+1}</td>
+          <td class="mono">${x.date || "-"}</td>
+          <td><b>${x.type || "-"}</b></td>
+          <td class="right mono">${fmtIDR(x.price || 0)}</td>
+          <td>${pill(x.status)}</td>
+          <td>
+            <div class="row-actions">
+              <button class="mini primary" data-act="edit" data-idx="${realIndex}">Edit</button>
+              <button class="mini danger" data-act="del" data-idx="${realIndex}">Hapus</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  // ===== Wire up =====
+  window.addEventListener("DOMContentLoaded", ()=>{
+    document.getElementById("btnAdd").addEventListener("click", ()=>openModal("add",-1,{}));
+    document.getElementById("btnAddSample").addEventListener("click", addSample);
+    document.getElementById("btnExport").addEventListener("click", exportJSON);
+    document.getElementById("btnImport").addEventListener("click", ()=>document.getElementById("fileInput").click());
+    document.getElementById("fileInput").addEventListener("change", (e)=>{
+      const f = e.target.files?.[0];
+      if(f) importJSON(f);
+      e.target.value = "";
+    });
+    document.getElementById("btnReset").addEventListener("click", resetAll);
+    document.getElementById("search").addEventListener("input", render);
+
+    document.getElementById("tblIncome").addEventListener("click", handleTableActions);
+
+    document.getElementById("btnClose").addEventListener("click", closeModal);
+    document.getElementById("btnCancel").addEventListener("click", closeModal);
+    document.getElementById("btnSave").addEventListener("click", modalSave);
+    backdrop.addEventListener("click", (e)=>{ if(e.target === backdrop) closeModal(); });
+
+    render();
+  });
+</script>
+</body>
+  </html>
