@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Buku Financial Freelancer Art — Operasional</title>
+  <style>
+    :root{
+      --bg:#0b1020; --card:#121a33; --text:#e9ecff; --muted:#a9b1d6;
+      --line: rgba(255,255,255,.10);
+      --green:#22c55e; --yellow:#f59e0b; --red:#ef4444; --blue:#3b82f6; --gray:#94a3b8;
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background: radial-gradient(900px 450px at 20% 0%, rgba(59,130,246,.18), transparent 60%),
+                  radial-gradient(900px 450px at 80% 10%, rgba(34,197,94,.14), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+    }
+    header{max-width:1200px;margin:0 auto;padding:20px 14px 10px;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between}
+    .title h1{margin:0;font-size:18px}
+    .title p{margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.35}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:800;font-size:13px}
+    .btn:hover{background:rgba(255,255,255,.08)}
+    .btn.primary{border-color:rgba(59,130,246,.45);background:rgba(59,130,246,.18)}
+    .btn.danger{border-color:rgba(239,68,68,.45);background:rgba(239,68,68,.14)}
+    .search{border:1px solid var(--line);background:rgba(0,0,0,.22);color:var(--text);padding:10px 12px;border-radius:12px;min-width:240px;outline:none}
+    .wrap{max-width:1200px;margin:0 auto;padding:0 14px 40px}
+    .kpi{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:12px}
+    @media(min-width:560px){.kpi{grid-template-columns:repeat(4,minmax(0,1fr));}}
+    .box{border:1px solid var(--line);background:rgba(0,0,0,.18);border-radius:16px;padding:12px}
+    .box .label{color:var(--muted);font-size:12px}
+    .box .val{margin-top:6px;font-size:16px;font-weight:900}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px}
+    @media(min-width:980px){.grid{grid-template-columns:1fr 1fr}.span2{grid-column:1/-1}}
+    .card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .card-head{padding:14px;background:rgba(0,0,0,.10);border-bottom:1px solid var(--line)}
+    .card-head h2{margin:0;font-size:14px}
+    .card-head .hint{margin-top:6px;color:var(--muted);font-size:12px}
+    .card-body{padding:12px 14px 14px}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.14)}
+    table{width:100%;border-collapse:collapse;min-width:760px}
+    th,td{padding:10px;border-bottom:1px solid var(--line);font-size:12.5px;vertical-align:top}
+    th{background:rgba(255,255,255,.06);position:sticky;top:0;z-index:1}
+    .mono{font-variant-numeric:tabular-nums}
+    .right{text-align:right}
+    .muted{color:var(--muted)}
+    .row-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .mini{padding:7px 10px;border-radius:10px;font-size:12px;font-weight:900;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);cursor:pointer}
+    .mini.primary{border-color:rgba(59,130,246,.45);background:rgba(59,130,246,.18)}
+    .mini.danger{border-color:rgba(239,68,68,.45);background:rgba(239,68,68,.14)}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;font-weight:900;font-size:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);white-space:nowrap}
+    .dot{width:10px;height:10px;border-radius:999px;background:var(--gray);box-shadow:0 0 0 4px rgba(148,163,184,.12)}
+    .pill.green .dot{background:var(--green);box-shadow:0 0 0 4px rgba(34,197,94,.14)}
+    .pill.yellow .dot{background:var(--yellow);box-shadow:0 0 0 4px rgba(245,158,11,.14)}
+    .pill.red .dot{background:var(--red);box-shadow:0 0 0 4px rgba(239,68,68,.14)}
+    .pill.blue .dot{background:var(--blue);box-shadow:0 0 0 4px rgba(59,130,246,.14)}
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:14px;z-index:999}
+    .modal{width:min(720px,100%);border-radius:18px;border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(18,26,51,.98),rgba(12,18,38,.98));box-shadow:var(--shadow);overflow:hidden}
+    .modal-head{padding:14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);gap:10px}
+    .modal-head h3{margin:0;font-size:14px}
+    .modal-body{padding:14px}
+    .modal-foot{padding:14px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input,select,textarea{width:100%;padding:10px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.22);color:var(--text);outline:none}
+    textarea{min-height:90px;resize:vertical}
+    .form-grid{display:grid;gap:10px;grid-template-columns:1fr}
+    @media(min-width:700px){.form-grid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="title">
+    <h1>📘 Buku Financial Freelancer Art — Operasional</h1>
+    <p>Versi ini bisa <b>Tambah / Edit / Hapus</b> langsung dari HP. Ada debug alert biar kita tahu script hidup.</p>
+  </div>
+  <div class="toolbar">
+    <input id="search" class="search" placeholder="Cari: nama klien / jenis / catatan..." />
+    <button class="btn primary" id="btnAddOrder">➕ Tambah Order</button>
+    <button class="btn primary" id="btnAddIncome">➕ Tambah Income</button>
+    <button class="btn primary" id="btnAddExpense">➕ Tambah Expense</button>
+    <button class="btn" id="btnAddSample">✨ Isi contoh data</button>
+    <button class="btn" id="btnExport">⬇️ Export JSON</button>
+    <button class="btn" id="btnImport">⬆️ Import JSON</button>
+    <button class="btn danger" id="btnReset">🗑️ Reset data</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="kpi" id="kpi"></div>
+
+  <div class="grid">
+    <section class="card span2">
+      <div class="card-head">
+        <h2>📄 ORDER LIST (MASTER ORDER)</h2>
+        <div class="hint">Klik Edit/Hapus di kolom Action.</div>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table id="tblOrders">
+            <thead>
+              <tr>
+                <th>No</th><th>Tanggal</th><th>Klien</th><th>Jenis</th>
+                <th class="right">Harga</th><th class="right">DP</th><th class="right">Sisa</th>
+                <th>Status Order</th><th>Status Bayar</th><th>Deadline</th><th>Catatan</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>📄 INCOME LOG</h2>
+        <div class="hint">Net = Amount − Fee</div>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table id="tblIncome" style="min-width:920px">
+            <thead>
+              <tr>
+                <th>Tanggal</th><th>Klien</th><th>Jenis</th>
+                <th class="right">Amount</th><th>Metode</th><th>Mata Uang</th>
+                <th class="right">Fee</th><th class="right">Net</th><th>Status</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>📄 EXPENSE LOG</h2>
+        <div class="hint">Catat biaya software, asset, internet, dll</div>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table id="tblExpense" style="min-width:860px">
+            <thead>
+              <tr>
+                <th>Tanggal</th><th>Kategori</th><th>Keterangan</th><th class="right">Jumlah</th><th>Metode</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card span2">
+      <div class="card-head">
+        <h2>📄 SUMMARY BULANAN</h2>
+        <div class="hint">Profit = Net Income − Expense</div>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table id="tblSummary">
+            <thead>
+              <tr><th>Bulan</th><th class="right">Income (Net)</th><th class="right">Expense</th><th class="right">Profit</th><th class="right">Orders</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card span2">
+      <div class="card-head">
+        <h2>📄 CLIENT TRACKING</h2>
+        <div class="hint">Repeat jika total order ≥ 2</div>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table id="tblClients">
+            <thead>
+              <tr><th>Klien</th><th class="right">Total Order</th><th class="right">Total Bayar (Net)</th><th>Repeat</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept="application/json" style="display:none" />
+
+<div class="modal-backdrop" id="backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">Tambah</h3>
+      <button class="mini" id="btnClose">✖</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot">
+      <button class="btn" id="btnCancel">Batal</button>
+      <button class="btn primary" id="btnSave">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== DEBUG: ini harus muncul kalau JS ke-load =====
+  alert("JS HIDUP ✅");
+
+  // ---------- Helpers ----------
+  const fmtIDR = (n) => new Intl.NumberFormat('id-ID').format(Math.round(n || 0));
+  const parseNum = (v) => {
+    const s = String(v ?? "").replace(/[^\d.-]/g,'');
+    const n = Number(s);
+    return Number.isFinite(n) ? n : 0;
+  };
+  const ym = (dateStr) => {
+    if(!dateStr) return "";
+    const parts = dateStr.split("/").map(s=>s.trim());
+    if(parts.length !== 3) return "";
+    const [d,m,y] = parts;
+    if(!y || !m) return "";
+    return `${y}-${String(m).padStart(2,"0")}`;
+  };
+  const ymLabel = (ymStr) => {
+    if(!ymStr) return "";
+    const [y,m] = ymStr.split("-");
+    const names = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+    return `${names[parseInt(m,10)-1]} ${y}`;
+  };
+  function pill(text){
+    const t = (text || "").toLowerCase();
+    let cls = "pill";
+    if(["lunas","paid","masuk","done","yes"].includes(t)) cls += " green";
+    else if(["dp","partial","pending"].includes(t)) cls += " yellow";
+    else if(["belum bayar","unpaid","overdue","cancel","no"].includes(t)) cls += " red";
+    else if(["on progress","wip","ongoing"].includes(t)) cls += " blue";
+    return `<span class="${cls}"><span class="dot"></span><span>${text || "-"}</span></span>`;
+  }
+
+  // ---------- Storage ----------
+  const KEY = "art_finance_template_operasional_v2";
+  const defaultData = { orders: [], income: [], expense: [] };
+  function load(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      if(!raw) return structuredClone(defaultData);
+      const p = JSON.parse(raw);
+      return {
+        orders: Array.isArray(p.orders)? p.orders: [],
+        income: Array.isArray(p.income)? p.income: [],
+        expense: Array.isArray(p.expense)? p.expense: [],
+      };
+    } catch { return structuredClone(defaultData); }
+  }
+  function save(data){ localStorage.setItem(KEY, JSON.stringify(data)); }
+
+  // ---------- Modal ----------
+  const backdrop = document.getElementById("backdrop");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalBody = document.getElementById("modalBody");
+  let modalState = { kind:null, mode:"add", index:-1 };
+
+  function opt(current, options){
+    const c = (current||"").trim();
+    return options.map(o=>`<option ${o===c?"selected":""}>${o}</option>`).join("");
+  }
+  function openModal(kind, mode, index, current){
+    modalState = { kind, mode, index };
+    modalTitle.textContent = (mode==="add" ? "Tambah " : "Edit ") + kind.toUpperCase();
+    modalBody.innerHTML = buildForm(kind, current || {});
+    backdrop.style.display = "flex";
+  }
+  function closeModal(){
+    backdrop.style.display = "none";
+    modalBody.innerHTML = "";
+    modalState = { kind:null, mode:"add", index:-1 };
+  }
+  function val(id){ return (document.getElementById(id)?.value || "").trim(); }
+
+  function buildForm(kind, v){
+    if(kind==="order"){
+      return `
+        <div class="form-grid">
+          <div><label>Tanggal (DD/MM/YYYY)</label><input id="f_date" value="${v.date||""}" placeholder="05/01/2026"></div>
+          <div><label>Deadline</label><input id="f_deadline" value="${v.deadline||""}" placeholder="12/01/2026"></div>
+          <div><label>Nama Klien</label><input id="f_client" value="${v.client||""}" placeholder="Alex"></div>
+          <div><label>Jenis Order</label><input id="f_type" value="${v.type||""}" placeholder="Full Body Anime"></div>
+          <div><label>Harga</label><input id="f_price" inputmode="numeric" value="${v.price??""}" placeholder="500000"></div>
+          <div><label>DP</label><input id="f_dp" inputmode="numeric" value="${v.dp??""}" placeholder="250000"></div>
+          <div><label>Status Order</label><select id="f_orderStatus">${opt(v.orderStatus, ["On Progress","WIP","Done","Cancel"])}</select></div>
+          <div><label>Status Bayar</label><select id="f_payStatus">${opt(v.payStatus, ["DP","Lunas","Belum Bayar","Cancel"])}</select></div>
+          <div style="grid-column:1/-1"><label>Catatan</label><textarea id="f_note">${v.note||""}</textarea></div>
+        </div>
+      `;
+    }
+    if(kind==="income"){
+      return `
+        <div class="form-grid">
+          <div><label>Tanggal (DD/MM/YYYY)</label><input id="f_date" value="${v.date||""}" placeholder="06/01/2026"></div>
+          <div><label>Status</label><select id="f_status">${opt(v.status, ["Masuk","Pending","Cancel"])}</select></div>
+          <div><label>Nama Klien</label><input id="f_client" value="${v.client||""}" placeholder="Alex"></div>
+          <div><label>Jenis</label><input id="f_type" value="${v.type||""}" placeholder="DP Full Body"></div>
+          <div><label>Amount</label><input id="f_amount" inputmode="numeric" value="${v.amount??""}" placeholder="250000"></div>
+          <div><label>Fee</label><input id="f_fee" inputmode="numeric" value="${v.fee??0}" placeholder="15000"></div>
+          <div><label>Metode</label><input id="f_method" value="${v.method||""}" placeholder="PayPal / Transfer"></div>
+          <div><label>Mata Uang</label><input id="f_currency" value="${v.currency||"IDR"}" placeholder="IDR"></div>
+        </div>
+      `;
+    }
+    return `
+      <div class="form-grid">
+        <div><label>Tanggal (DD/MM/YYYY)</label><input id="f_date" value="${v.date||""}" placeholder="07/01/2026"></div>
+        <div><label>Metode</label><input id="f_method" value="${v.method||""}" placeholder="Debit / E-Wallet"></div>
+        <div><label>Kategori</label><input id="f_category" value="${v.category||""}" placeholder="Software"></div>
+        <div><label>Jumlah</label><input id="f_amount" inputmode="numeric" value="${v.amount??""}" placeholder="120000"></div>
+        <div style="grid-column:1/-1"><label>Keterangan</label><textarea id="f_desc">${v.desc||""}</textarea></div>
+      </div>
+    `;
+  }
+
+  function readForm(){
+    const k = modalState.kind;
+    if(k==="order"){
+      return {
+        date: val("f_date"),
+        deadline: val("f_deadline"),
+        client: val("f_client"),
+        type: val("f_type"),
+        price: parseNum(val("f_price")),
+        dp: parseNum(val("f_dp")),
+        orderStatus: val("f_orderStatus"),
+        payStatus: val("f_payStatus"),
+        note: val("f_note")
+      };
+    }
+    if(k==="income"){
+      return {
+        date: val("f_date"),
+        status: val("f_status"),
+        client: val("f_client"),
+        type: val("f_type"),
+        amount: parseNum(val("f_amount")),
+        fee: parseNum(val("f_fee")),
+        method: val("f_method"),
+        currency: val("f_currency") || "IDR"
+      };
+    }
+    return {
+      date: val("f_date"),
+      method: val("f_method"),
+      category: val("f_category"),
+      amount: parseNum(val("f_amount")),
+      desc: val("f_desc")
+    };
+  }
+
+  function modalSave(){
+    const v = readForm();
+    const data = load();
+    const { kind, mode, index } = modalState;
+
+    if(!v.date){ alert("Tanggal wajib diisi."); return; }
+
+    if(kind==="order"){
+      if(!v.client || !v.type){ alert("Klien & Jenis wajib."); return; }
+      if(mode==="add") data.orders.push(v); else data.orders[index] = v;
+    } else if(kind==="income"){
+      if(!v.client || !v.type){ alert("Klien & Jenis wajib."); return; }
+      if(mode==="add") data.income.push(v); else data.income[index] = v;
+    } else {
+      if(!v.category){ alert("Kategori wajib."); return; }
+      if(mode==="add") data.expense.push(v); else data.expense[index] = v;
+    }
+
+    save(data);
+    closeModal();
+    render();
+  }
+
+  // ---------- CRUD helpers ----------
+  function addSample(){
+    const data = load();
+    data.orders = [
+      {date:"05/01/2026", client:"Alex", type:"Full Body Anime", price:500000, dp:250000, orderStatus:"On Progress", payStatus:"DP", deadline:"12/01/2026", note:"Revisi max 2x"},
+      {date:"06/01/2026", client:"Nina", type:"Bust Up Semi-Realistic", price:350000, dp:350000, orderStatus:"Done", payStatus:"Lunas", deadline:"10/01/2026", note:"Background simple"}
+    ];
+    data.income = [
+      {date:"06/01/2026", client:"Alex", type:"DP Full Body", amount:250000, method:"PayPal", currency:"IDR", fee:15000, status:"Masuk"},
+      {date:"06/01/2026", client:"Nina", type:"Lunas Bust Up", amount:350000, method:"Transfer", currency:"IDR", fee:0, status:"Masuk"}
+    ];
+    data.expense = [
+      {date:"07/01/2026", category:"Software", desc:"Clip Studio (bulanan)", amount:120000, method:"Debit"},
+      {date:"07/01/2026", category:"Internet", desc:"Paket internet", amount:150000, method:"E-Wallet"}
+    ];
+    save(data);
+    render();
+    alert("Contoh data sudah masuk ✅");
+  }
+
+  function exportJSON(){
+    const data = load();
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "buku-financial.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  function importJSON(file){
+    const reader = new FileReader();
+    reader.onload = () => {
+      try{
+        const p = JSON.parse(reader.result);
+        const clean = {
+          orders: Array.isArray(p.orders)? p.orders: [],
+          income: Array.isArray(p.income)? p.income: [],
+          expense: Array.isArray(p.expense)? p.expense: [],
+        };
+        save(clean);
+        render();
+        alert("Import sukses ✅");
+      } catch { alert("File JSON invalid ❌"); }
+    };
+    reader.readAsText(file);
+  }
+  function resetAll(){
+    if(!confirm("Reset semua data?")) return;
+    localStorage.removeItem(KEY);
+    render();
+  }
+
+  function handleTableActions(e){
+    const btn = e.target.closest("button[data-act]");
+    if(!btn) return;
+    const act = btn.dataset.act;
+    const idx = Number(btn.dataset.idx);
+    const data = load();
+
+    if(act==="edit-order") openModal("order","edit",idx,data.orders[idx]);
+    if(act==="del-order" && confirm("Hapus order ini?")) { data.orders.splice(idx,1); save(data); render(); }
+
+    if(act==="edit-income") openModal("income","edit",idx,data.income[idx]);
+    if(act==="del-income" && confirm("Hapus income ini?")) { data.income.splice(idx,1); save(data); render(); }
+
+    if(act==="edit-expense") openModal("expense","edit",idx,data.expense[idx]);
+    if(act==="del-expense" && confirm("Hapus expense ini?")) { data.expense.splice(idx,1); save(data); render(); }
+  }
+
+  // ---------- Render ----------
+  function render(){
+    const data = load();
+    const q = (document.getElementById("search").value || "").toLowerCase().trim();
+
+    const orders = data.orders.filter(o=>{
+      if(!q) return true;
+      return `${o.client} ${o.type} ${o.note}`.toLowerCase().includes(q);
+    });
+
+    const tbO = document.querySelector("#tblOrders tbody");
+    tbO.innerHTML = orders.map((o, idx)=>{
+      const price=o.price||0, dp=o.dp||0;
+      const sisa=Math.max(0, price-dp);
+      const realIndex = data.orders.indexOf(o);
+      return `
+        <tr>
+          <td class="mono">${idx+1}</td>
+          <td class="mono">${o.date||"-"}</td>
+          <td><b>${o.client||"-"}</b></td>
+          <td>${o.type||"-"}</td>
+          <td class="right mono">${fmtIDR(price)}</td>
+          <td class="right mono">${fmtIDR(dp)}</td>
+          <td class="right mono">${fmtIDR(sisa)}</td>
+          <td>${pill(o.orderStatus)}</td>
+          <td>${pill(o.payStatus)}</td>
+          <td class="mono">${o.deadline||"-"}</td>
+          <td class="muted">${o.note||""}</td>
+          <td>
+            <div class="row-actions">
+              <button class="mini primary" data-act="edit-order" data-idx="${realIndex}">Edit</button>
+              <button class="mini danger" data-act="del-order" data-idx="${realIndex}">Hapus</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    const income = data.income.filter(i=>{
+      if(!q) return true;
+      return `${i.client} ${i.type}`.toLowerCase().includes(q);
+    });
+    const tbI = document.querySelector("#tblIncome tbody");
+    tbI.innerHTML = income.map(i=>{
+      const net=(i.amount||0)-(i.fee||0);
+      const realIndex = data.income.indexOf(i);
+      return `
+        <tr>
+          <td class="mono">${i.date||"-"}</td>
+          <td><b>${i.client||"-"}</b></td>
+          <td>${i.type||"-"}</td>
+          <td class="right mono">${fmtIDR(i.amount||0)}</td>
+          <td>${i.method||"-"}</td>
+          <td class="mono">${i.currency||"IDR"}</td>
+          <td class="right mono">${fmtIDR(i.fee||0)}</td>
+          <td class="right mono"><b>${fmtIDR(net)}</b></td>
+          <td>${pill(i.status)}</td>
+          <td>
+            <div class="row-actions">
+              <button class="mini primary" data-act="edit-income" data-idx="${realIndex}">Edit</button>
+              <button class="mini danger" data-act="del-income" data-idx="${realIndex}">Hapus</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    const expense = data.expense.filter(e=>{
+      if(!q) return true;
+      return `${e.category} ${e.desc}`.toLowerCase().includes(q);
+    });
+    const tbE = document.querySelector("#tblExpense tbody");
+    tbE.innerHTML = expense.map(e=>{
+      const realIndex = data.expense.indexOf(e);
+      return `
+        <tr>
+          <td class="mono">${e.date||"-"}</td>
+          <td><b>${e.category||"-"}</b></td>
+          <td class="muted">${e.desc||""}</td>
+          <td class="right mono">${fmtIDR(e.amount||0)}</td>
+          <td>${e.method||"-"}</td>
+          <td>
+            <div class="row-actions">
+              <button class="mini primary" data-act="edit-expense" data-idx="${realIndex}">Edit</button>
+              <button class="mini danger" data-act="del-expense" data-idx="${realIndex}">Hapus</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    // Summary
+    const sum = {};
+    for(const i of data.income){
+      const k = ym(i.date); if(!k) continue;
+      sum[k] = sum[k] || {income:0, expense:0, orders:0};
+      sum[k].income += ((i.amount||0)-(i.fee||0));
+    }
+    for(const e of data.expense){
+      const k = ym(e.date); if(!k) continue;
+      sum[k] = sum[k] || {income:0, expense:0, orders:0};
+      sum[k].expense += (e.amount||0);
+    }
+    for(const o of data.orders){
+      const k = ym(o.date); if(!k) continue;
+      sum[k] = sum[k] || {income:0, expense:0, orders:0};
+      sum[k].orders += 1;
+    }
+    const keys = Object.keys(sum).sort();
+    document.querySelector("#tblSummary tbody").innerHTML = keys.map(k=>{
+      const s = sum[k];
+      const profit = (s.income||0) - (s.expense||0);
+      return `
+        <tr>
+          <td><b>${ymLabel(k)}</b> <span class="muted mono">(${k})</span></td>
+          <td class="right mono">${fmtIDR(s.income||0)}</td>
+          <td class="right mono">${fmtIDR(s.expense||0)}</td>
+          <td class="right mono"><b>${fmtIDR(profit)}</b></td>
+          <td class="right mono">${fmtIDR(s.orders||0)}</td>
+        </tr>
+      `;
+    }).join("");
+
+    // Client tracking
+    const clients = {};
+    for(const o of data.orders){
+      const c = o.client || "Unknown";
+      clients[c] = clients[c] || {orders:0, netPaid:0};
+      clients[c].orders += 1;
+    }
+    for(const i of data.income){
+      const c = i.client || "Unknown";
+      clients[c] = clients[c] || {orders:0, netPaid:0};
+      clients[c].netPaid += ((i.amount||0)-(i.fee||0));
+    }
+    const arr = Object.entries(clients).map(([name,v])=>({name,...v}))
+      .sort((a,b)=> (b.netPaid-a.netPaid) || (b.orders-a.orders));
+    document.querySelector("#tblClients tbody").innerHTML = arr.map(c=>{
+      const repeat = c.orders >= 2 ? pill("YES") : pill("NO");
+      return `
+        <tr>
+          <td><b>${c.name}</b></td>
+          <td class="right mono">${fmtIDR(c.orders)}</td>
+          <td class="right mono"><b>${fmtIDR(c.netPaid)}</b></td>
+          <td>${repeat}</td>
+        </tr>
+      `;
+    }).join("");
+
+    // KPI
+    const netIncomeTotal = data.income.reduce((a,i)=> a + ((i.amount||0)-(i.fee||0)), 0);
+    const expenseTotal = data.expense.reduce((a,e)=> a + (e.amount||0), 0);
+    const profitTotal = netIncomeTotal - expenseTotal;
+    const orderCount = data.orders.length;
+    const uniqueClients = new Set(data.orders.map(o=>o.client).filter(Boolean)).size;
+
+    document.getElementById("kpi").innerHTML = `
+      <div class="box"><div class="label">Total Net Income</div><div class="val mono">${fmtIDR(netIncomeTotal)}</div></div>
+      <div class="box"><div class="label">Total Expense</div><div class="val mono">${fmtIDR(expenseTotal)}</div></div>
+      <div class="box"><div class="label">Profit Bersih</div><div class="val mono">${fmtIDR(profitTotal)}</div></div>
+      <div class="box"><div class="label">Orders / Clients</div><div class="val mono">${fmtIDR(orderCount)} / ${fmtIDR(uniqueClients)}</div></div>
+    `;
+  }
+
+  // ---------- Wire up ----------
+  window.addEventListener("DOMContentLoaded", () => {
+    // Cek ID penting (kalau hilang, kasih alert)
+    const required = ["btnAddOrder","btnAddIncome","btnAddExpense","btnAddSample","btnReset","tblOrders","tblIncome","tblExpense"];
+    const missing = required.filter(id => !document.getElementById(id));
+    if(missing.length){
+      alert("ID HILANG ❌: " + missing.join(", "));
+      return;
+    }
+
+    document.getElementById("btnAddOrder").addEventListener("click", ()=>openModal("order","add",-1,{}));
+    document.getElementById("btnAddIncome").addEventListener("click", ()=>openModal("income","add",-1,{}));
+    document.getElementById("btnAddExpense").addEventListener("click", ()=>openModal("expense","add",-1,{}));
+
+    document.getElementById("btnAddSample").addEventListener("click", () => {
+      alert("TOMBOL CONTOH DATA KEKLIK ✅");
+      addSample();
+    });
+
+    document.getElementById("btnExport").addEventListener("click", exportJSON);
+    document.getElementById("btnImport").addEventListener("click", ()=> document.getElementById("fileInput").click());
+    document.getElementById("fileInput").addEventListener("change", (e)=>{
+      const f = e.target.files?.[0];
+      if(f) importJSON(f);
+      e.target.value = "";
+    });
+
+    document.getElementById("btnReset").addEventListener("click", resetAll);
+    document.getElementById("search").addEventListener("input", render);
+
+    document.getElementById("tblOrders").addEventListener("click", handleTableActions);
+    document.getElementById("tblIncome").addEventListener("click", handleTableActions);
+    document.getElementById("tblExpense").addEventListener("click", handleTableActions);
+
+    document.getElementById("btnClose").addEventListener("click", closeModal);
+    document.getElementById("btnCancel").addEventListener("click", closeModal);
+    document.getElementById("btnSave").addEventListener("click", modalSave);
+
+    backdrop.addEventListener("click", (e)=>{ if(e.target === backdrop) closeModal(); });
+
+    render();
+  });
+</script>
+</body>
+</html>
